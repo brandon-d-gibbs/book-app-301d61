@@ -8,17 +8,17 @@
 </head>
 <body>
     <h1>Search: </h1>
-    <form action="/searches/new" method="POST">
-        <input type="text" name="search" placeholder="Search for title or author" required />
+    <form action="/searches" method="POST">
+        <input type="text" name="searchQuery" placeholder="Search for title or author" required />
         <fieldset>
             <h4>Search by:  </h4>
             <label for="title">
                 <span>Title</span>
-                <input type="radio" name="search" value="title"/>
+                <input type="radio" name="search" value="intitle"/>
             </label>
             <label for="author">
                 <span>Author</span>
-                <input type="radio" name="search" value="author"/>
+                <input type="radio" name="search" value="inauthor"/>
             </label>
         </fieldset>
         <button class="searchButton" type="submit">Search for Books</button>
