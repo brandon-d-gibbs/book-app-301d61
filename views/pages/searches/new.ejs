@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Search</title>
+    <link type="text/css" rel="stylesheet" href="../styles/styles.css" />
+</head>
+<body>
+    <h1>Search: </h1>
+    <form action="/searches/new" method="POST">
+        <input type="text" name="search" placeholder="Search for title or author" required />
+        <fieldset>
+            <h4>Search by:  </h4>
+            <label for="title">
+                <span>Title</span>
+                <input type="radio" name="search" value="title"/>
+            </label>
+            <label for="author">
+                <span>Author</span>
+                <input type="radio" name="search" value="author"/>
+            </label>
+        </fieldset>
+        <button class="searchButton" type="submit">Search for Books</button>
+    </form>
+</body>
+</html>

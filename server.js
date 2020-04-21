@@ -20,6 +20,7 @@ const PORT = process.env.PORT || 3015
 
 // *** Routes ***
 app.get('/', renderHome);
+app.get('/searches/new', newSearch);
 
 
 // *** Callback Functions ***
@@ -27,6 +28,10 @@ function renderHome(request, response){
     response.status(200).render('./pages/index.ejs');
 }
 
+function newSearch(request, response){
+    response.status(200).render('./pages/searches/new');
+
+}
 
 
 
