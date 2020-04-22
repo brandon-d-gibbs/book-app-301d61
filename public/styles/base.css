@@ -2,6 +2,10 @@ body {
     background-color: rgb(233, 152, 3);    
 }
 
+h1, h4, h5 {
+    text-align: center;
+}
+
 h1 {
     font-size: 3.4rem;
     margin: 21px;

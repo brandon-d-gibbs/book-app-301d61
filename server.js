@@ -27,7 +27,7 @@ app.post('/searches', collectFormData);
 
 // *** Callback Functions ***
 function renderHome(request, response){
-    response.status(200).render('./pages/index.ejs');
+    response.status(200).render('./pages/index');
 }
 
 function newSearch(request, response){    
