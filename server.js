@@ -22,6 +22,7 @@ const PORT = process.env.PORT || 3015
 app.get('/', renderHome);
 app.get('/searches/new', newSearch);
 app.post('/searches', collectFormData);
+// app.get('*', );
 
 
 // *** Callback Functions ***
@@ -42,10 +43,14 @@ function collectFormData(request, response){
 
     superagent.get(url)
         .then((results) => results.body.items.map(obj => new Book(obj.volumeInfo)))      
-        .then((book) => response.status(200).render('./pages/searches/show', {book: book}))               
+        .then((book) => response.status(200).render('./pages/searches/show', {book: book}))
+        .catch(error => handleErrors(error, request, response));             
         
+ 
+}
 
-    
+function handleErrors(error, request, response){
+    response.status(500).render('./pages/error');
 }
 
 // *** Constructor Functions ***
