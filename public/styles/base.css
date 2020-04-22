@@ -1,3 +1,14 @@
 body {
-    background-color: rgb(233, 152, 3);
+    background-color: rgb(233, 152, 3);    
+}
+
+h1 {
+    font-size: 3.4rem;
+    margin: 21px;
+}
+h4 {
+    font-size: 2.2rem;
+}
+h5 {
+    font-size: 1.5rem;
 }

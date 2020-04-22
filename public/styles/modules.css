@@ -1,0 +1,84 @@
+form {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    min-width: 80%;
+    background: rgb(226, 223, 223);
+    margin-top: 40px;
+    padding: 14%;
+}
+
+form input{
+    margin: 14px;
+    height: 40px;
+    border-radius: 7px;
+    border-style: none;
+}
+
+form input.searchBox{
+    width: 80%;
+
+}
+
+fieldset {
+    width: 80%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+}
+
+fieldset>label {
+    border: thin solid rgba(47, 79, 79, 0.623);
+    border-radius: 14px;
+    margin: 7px;
+    padding: 0 3px;
+    max-width: 80%;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.searchButton {
+    width: 80%;
+    height: 40px;
+    border-radius: 7px;
+    background: rgb(233, 152, 3);
+}
+
+.resultsMain{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+
+.bookRender{
+    max-width: 80%;
+    display: flex;
+    flex-flow: column nowrap;
+    padding: 3px;
+    align-items: center;
+    margin: 21px 0;
+    background: lightcyan;
+    border-radius: 7px;
+    box-shadow: 3px 4px #778899d2, 5px 5px #494b4ed2 ;
+}
+
+.bookRender img, h4, h5, p{
+    margin: 7px 0;
+}
+
+@media(min-width: 960px){
+    .resultsMain{
+        flex-flow: row wrap;
+        align-items: center;
+        justify-content: space-around;
+    }
+    .bookRender{
+        max-width: 40%;
+        height: 550px;
+        overflow: hidden;
+        /* margin: 21px auto; */
+
+    }
+}
