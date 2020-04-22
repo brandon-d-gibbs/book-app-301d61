@@ -1,3 +1,16 @@
+.collectionHeader{
+    width: 100%;
+    background: darkslategray;
+    color: white;
+    text-align: center;
+}
+
+.homeSearchButton{
+    height: 40px;
+    border-radius: 7px;
+    margin: 28px 0;
+}
+
 form {
     display: flex;
     flex-flow: column nowrap;
@@ -78,7 +91,6 @@ fieldset>label {
         max-width: 40%;
         height: 550px;
         overflow: hidden;
-        /* margin: 21px auto; */
 
     }
 }
