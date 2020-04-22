@@ -41,20 +41,25 @@ function collectFormData(request, response){
     let url = `https://www.googleapis.com/books/v1/volumes?q=+${radioSelected}:${searchText}&maxResults=10`;
 
     superagent.get(url)
-        .then((results) => {
-            console.log('books', results.body.items);
-        })
+        .then((results) => results.body.items.map(obj => new Book(obj.volumeInfo)))      
+        .then((book) => response.status(200).render('./pages/searches/show', {book: book}))               
+        
 
-
-    response.status(200).render('./pages/searches/show');
+    
 }
 
 // *** Constructor Functions ***
 
-// function newBook(book) {
-//     this.img = 
-// }
-
+function Book(obj) {
+    this.title = obj.title;
+    this.authors_names = obj.authors;
+    this.description = obj.description;
+    this.isbn = obj.industryIndetifiers;
+    this.bookshelf = obj.bookshelf;
+    if(obj.imageLinks){
+        this.imageurl = obj.imageLinks.thumbnail ? obj.imageLinks.thumbnail : url('./styles/img/book-placeholder');
+    }
+}
 
 // Turn it on
 app.listen(PORT, () => {

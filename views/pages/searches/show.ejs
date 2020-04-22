@@ -8,5 +8,18 @@
 </head>
 <body>
     <h1>Search Results:  </h1>
+
+    <% book.forEach(book => { %>
+
+    <img src="<%= book.imageurl %>" />
+
+    <h4><%= book.title %></h4>
+
+    <h5><%= book.authors_names %></h5>
+
+    <p><%= book.description %>></p>
+    <% }) %>
+
+
 </body>
 </html>
