@@ -62,7 +62,7 @@ function Book(obj) {
     this.isbn = obj.industryIndetifiers;
     this.bookshelf = obj.bookshelf;
     if(obj.imageLinks){
-        this.imageurl = obj.imageLinks.thumbnail ? obj.imageLinks.thumbnail : url('./styles/img/book-placeholder');
+        this.imageurl = obj.imageLinks.thumbnail ? obj.imageLinks.thumbnail : url('./styles/img/book-placeholder.png');
     }
 }
 

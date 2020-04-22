@@ -7,18 +7,28 @@
     <link type="text/css" rel="stylesheet" href="../styles/styles.css" />
 </head>
 <body>
-    <h1>Search: </h1>
+
+    <!-- <nav>
+        <h2>Best Books!</h2>
+        <ul>
+            <li>Search</li>
+            <li>Home</li>
+            <li>My Books</li>
+        </ul>
+    </nav> -->
+
+
     <form action="/searches" method="POST">
-        <input type="text" name="searchQuery" placeholder="Search for title or author" required />
-        <fieldset>
-            <h4>Search by:  </h4>
+        <h1>Search: </h1>
+        <input class="searchBox" type="text" name="searchQuery" placeholder="Search for title or author" required />
+        <fieldset>            
             <label for="title">
                 <span>Title</span>
-                <input type="radio" name="search" value="intitle"/>
+                <input class="radio" type="radio" name="search" value="intitle"/>
             </label>
             <label for="author">
                 <span>Author</span>
-                <input type="radio" name="search" value="inauthor"/>
+                <input class="radio" type="radio" name="search" value="inauthor"/>
             </label>
         </fieldset>
         <button class="searchButton" type="submit">Search for Books</button>
