@@ -24,6 +24,7 @@ const PORT = process.env.PORT || 3015
 app.get('/', renderHome);
 app.get('/searches/new', newSearch);
 app.post('/searches', collectFormData);
+app.post('/books', addToCollection);
 app.get('/books/:id', showBookDetails);
 app.get('*', (request, response) => response.status(404).render('./pages/error', {errorMessage: 'Page not found', errorCorrect: 'The path you took, leads only here. Some would call this, "nowhere".'}));
 
@@ -77,6 +78,10 @@ function showBookDetails(request, response) {
             console.log('Error showing book details', err)
             response.status(500).render('./pages/error', {errorMessage: 'Could not show book details', errorCorrect: 'Yeah, I am not sure what you did there.'})
         })
+}
+
+function addToCollection(request, response) {
+
 }
 
 function handleErrors(error, request, response){
