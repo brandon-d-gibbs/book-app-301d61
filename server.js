@@ -24,7 +24,8 @@ const PORT = process.env.PORT || 3015
 app.get('/', renderHome);
 app.get('/searches/new', newSearch);
 app.post('/searches', collectFormData);
-// app.get('*', );
+app.get('/books/:id', showBookDetails);
+app.get('*', (request, response) => response.status(404).render('./pages/error', {errorMessage: 'Page not found', errorCorrect: 'The path you took, leads only here. Some would call this, "nowhere".'}));
 
 
 // *** Callback Functions ***
@@ -38,7 +39,10 @@ function renderHome(request, response){
             
         response.status(200).render('pages/index', {book: resultsData, count: collectionCount});
 
-        }).catch(error => handleErrors(error, request, response)) 
+        }).catch((err) => {
+            console.error('Error when getting form data: ', err);
+            response.status(500).render('./pages/error', {errorMessage: 'Could not retrieve book results from Database.', errorCorrect: 'Ensure that your database is properly connected.'});
+          }) 
 }
 
 function newSearch(request, response){    
@@ -55,8 +59,24 @@ function collectFormData(request, response){
 
     superagent.get(url)
         .then((results) => results.body.items.map(obj => new Book(obj.volumeInfo)))      
-        .then((book) => response.status(200).render('./pages/searches/show', {book: book}))
-        .catch(error => handleErrors(error, request, response));             
+        .then((book) => response.status(200).render('./pages/books/show', {book: book}))
+        .catch((err) => {
+            console.error('Error when getting form data: ', err);
+            response.status(500).render('./pages/error', {errorMessage: 'Could not retrieve book results from API', errorCorrect: 'Make sure that your inputs are correct: API link and path.'});
+          })            
+}
+
+function showBookDetails(request, response) {
+    let id = request.params.id;
+    let sql = 'SELECT * FROM books WHERE id=$1;';
+    let safeValues = [id];
+
+    client.query(sql, safeValues)
+        .then(results => response.render('./pages/books/details', {book: results.rows}))
+        .catch((err) => {
+            console.log('Error showing book details', err)
+            response.status(500).render('./pages/error', {errorMessage: 'Could not show book details', errorCorrect: 'Yeah, I am not sure what you did there.'})
+        })
 }
 
 function handleErrors(error, request, response){
