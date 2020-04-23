@@ -10,8 +10,22 @@
    <h1>Welcome to Best Books</h1> 
 
    <section class="collectionHeader">
-       <h5>Your Collection: 0 books.</h5>
+       <h5>Your Collection: <%= count %> books.</h5>
+       
    </section>
+
+   <main class="resultsMain">
+    <% book.forEach(book => { %>
+
+        <article class="bookRender">
+            <img src="<%= book.imageurl %>" />
+            <h4><%= book.title %></h4>
+            <h5><%= book.authors_names %></h5>
+            <p><%= book.description %></p>
+
+        </article>
+        <% }) %>
+   </main>
 
    <a class="homeSearchLink" href="/searches/new"><button class="homeSearchButton">Search For Books</button></a>
 </body>

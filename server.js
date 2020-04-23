@@ -9,6 +9,8 @@ const app = express();
 
 // *** Dependencies ***
 const superagent = require('superagent');
+const pg = require('pg');
+const client = new pg.Client(process.env.DATABASE_URL);
 
 // Get EJS plugged in
 app.use(express.urlencoded({extended: true}));
@@ -27,7 +29,16 @@ app.post('/searches', collectFormData);
 
 // *** Callback Functions ***
 function renderHome(request, response){
-    response.status(200).render('./pages/index');
+    let sql = 'SELECT * FROM books;';
+    
+    client.query(sql)
+    .then(results => {
+        let resultsData = results.rows;
+        let collectionCount = results.rows.length;
+            
+        response.status(200).render('pages/index', {book: resultsData, count: collectionCount});
+
+        }).catch(error => handleErrors(error, request, response)) 
 }
 
 function newSearch(request, response){    
@@ -41,12 +52,11 @@ function collectFormData(request, response){
     let radioSelected = search.search
     let url = `https://www.googleapis.com/books/v1/volumes?q=+${radioSelected}:${searchText}&maxResults=10`;
 
+
     superagent.get(url)
         .then((results) => results.body.items.map(obj => new Book(obj.volumeInfo)))      
         .then((book) => response.status(200).render('./pages/searches/show', {book: book}))
         .catch(error => handleErrors(error, request, response));             
-        
- 
 }
 
 function handleErrors(error, request, response){
@@ -54,7 +64,6 @@ function handleErrors(error, request, response){
 }
 
 // *** Constructor Functions ***
-
 function Book(obj) {
     this.title = obj.title;
     this.authors_names = obj.authors;
@@ -67,6 +76,12 @@ function Book(obj) {
 }
 
 // Turn it on
-app.listen(PORT, () => {
-    console.log(`Hey, you like books? Let\'s start looking for some. In case you need to know, we\'re doing this on ${PORT}`);
-})
+client.connect()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`Hey, you like books? Let\'s start looking for some. In case you need to know, we\'re doing this on ${PORT}`);            
+        })
+    }).catch(error => {
+        console.log('No server for you. Is your Database running? Is your port taken?');
+        response.status(500).send(error);
+    }); 
