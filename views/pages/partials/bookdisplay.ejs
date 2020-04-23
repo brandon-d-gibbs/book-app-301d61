@@ -1,0 +1,15 @@
+<main class="resultsMain">
+    <% book.forEach(book => { %>
+
+        <article class="bookRender">
+            <img src="<%= book.imageurl %>" />
+
+            <h4><%= book.title %></h4>
+
+            <h5><%= book.authors_names %></h5>
+
+            <p><%= book.description %></p>
+
+        </article>
+        <% }) %>
+</main>
