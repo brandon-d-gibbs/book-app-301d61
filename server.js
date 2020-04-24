@@ -11,11 +11,15 @@ const app = express();
 const superagent = require('superagent');
 const pg = require('pg');
 const client = new pg.Client(process.env.DATABASE_URL);
+const methodOverride = require('method-override');
 
-// Get EJS plugged in
+// *** Plug it in ***
+// EJS
 app.use(express.urlencoded({extended: true}));
 app.use(express.static('./public'));
 app.set('view engine', 'ejs');
+// Method Override
+app.use(methodOverride('_method'));
 
 // PORT
 const PORT = process.env.PORT || 3015
@@ -81,7 +85,20 @@ function showBookDetails(request, response) {
 }
 
 function addToCollection(request, response) {
-
+    let{title, authors_names, description, isbn, bookshelf, imageurl} = request.body;
+    console.log('request dat body', request.body);
+    let sql = `INSERT INTO books (title, authors_names, description, isbn, bookshelf, imageurl) VALUES ($1, $2, $3, $4, $5,$6) RETURNING id;`;
+    let safeValues = [title, authors_names, description, isbn, bookshelf, imageurl];
+    console.log('Try again', sql, safeValues);
+    client.query(sql, safeValues)
+        .then(results => {
+            console.log('results!!!', results.rows[0].id)
+            response.status(200).redirect(`./books/${results.rows[0].id}`)
+        })
+        .catch((err) => {
+            console.log('Error rendering template data from DB /addToCollection', err)
+            response.status(500).render('./pages/error', {errorMessage: 'Could not add books to DB or show them.', errorCorrect: 'Yeah, I am not sure what you did there.'})
+        })
 }
 
 function handleErrors(error, request, response){
@@ -93,7 +110,7 @@ function Book(obj) {
     this.title = obj.title;
     this.authors_names = obj.authors;
     this.description = obj.description;
-    this.isbn = obj.industryIndetifiers;
+    this.isbn = obj.industryIdentifiers[0].identifier;
     this.bookshelf = obj.bookshelf;
     if(obj.imageLinks){
         this.imageurl = obj.imageLinks.thumbnail ? obj.imageLinks.thumbnail : url('./styles/img/book-placeholder.png');

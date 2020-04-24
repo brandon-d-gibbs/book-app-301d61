@@ -4,7 +4,7 @@ CREATE TABLE books(
     id SERIAL PRIMARY KEY,
     title VARCHAR(255),
     authors_names VARCHAR(255),
-    description VARCHAR (900),
+    description TEXT,
     isbn VARCHAR(100),
     bookshelf VARCHAR(255),
     imageurl VARCHAR(500)

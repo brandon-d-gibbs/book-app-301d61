@@ -30,7 +30,6 @@ form input{
 
 form input.searchBox{
     width: 80%;
-
 }
 
 fieldset {
@@ -79,6 +78,17 @@ fieldset>label {
 
 .bookRender img, h4, h5, p{
     margin: 7px 0;
+}
+
+/* Add to Database */
+.addBookForm{
+    background: none;
+    height: auto;
+    width: auto;
+}
+
+.addBookField{
+    display: none;
 }
 
 @media(min-width: 960px){
