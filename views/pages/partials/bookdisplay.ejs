@@ -10,6 +10,31 @@
 
             <p><%= book.description %></p>
 
+            <!-- Update in DB -->
+
+            <form class="edit-button-form hidden" action="/books/<%= book.id %>/?_method=PUT" method="POST">
+                <fieldset>
+                    <label>Title</label>
+                    <input type="text" name="title" value="<%= book.title %>" />
+                    <label>Author</label>
+                    <input type="text" name="authors_names" value="<%= book.authors_names %>" />
+                    <label>Description</label>
+                    <input type="text" name="description" value="<%= book.description %>" />
+                    <label>ISBN</label>
+                    <input type="text" name="isbn" value="<%= book.isbn %>" />     
+                    <label>Bookshelf</label>
+                    <input type="text" name="bookshelf" value="<%= book.bookshelf %>" />
+                    <label>Image</label>
+                    <input type="text" name="imageurl" value="<%= book.imageurl %>" />
+                    <button class="updateButton" type="submit">Update</button>
+                </fieldset>
+            </form>
+            
+            <button class="show-edit-form">Edit</button>
+            <!-- Delete from DB -->
+            <form class="delete-button-form hidden" action="/books/<%= book.id %>/?_method=DELETE" method="POST">
+            </form>
+            <button type="submit">Delete</button>
         </article>
         <% }) %>
 </main>

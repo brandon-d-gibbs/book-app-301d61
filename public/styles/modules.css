@@ -30,7 +30,6 @@ form input{
 
 form input.searchBox{
     width: 80%;
-
 }
 
 fieldset {
@@ -81,6 +80,21 @@ fieldset>label {
     margin: 7px 0;
 }
 
+/* Add to Database */
+.addBookForm{
+    background: none;
+    height: auto;
+    width: auto;
+}
+
+.addBookField{
+    display: none;
+}
+.edit-button-form{
+    border: none;
+    background-color: transparent;
+}
+
 @media(min-width: 960px){
     .resultsMain{
         flex-flow: row wrap;
@@ -90,7 +104,7 @@ fieldset>label {
     .bookRender{
         max-width: 40%;
         height: 550px;
-        overflow: hidden;
+        overflow: scroll;
 
     }
 }

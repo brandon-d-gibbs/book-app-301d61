@@ -11,11 +11,15 @@ const app = express();
 const superagent = require('superagent');
 const pg = require('pg');
 const client = new pg.Client(process.env.DATABASE_URL);
+const methodOverride = require('method-override');
 
-// Get EJS plugged in
+// *** Plug it in ***
+// EJS
 app.use(express.urlencoded({extended: true}));
 app.use(express.static('./public'));
 app.set('view engine', 'ejs');
+// Method Override
+app.use(methodOverride('_method'));
 
 // PORT
 const PORT = process.env.PORT || 3015
@@ -26,6 +30,8 @@ app.get('/searches/new', newSearch);
 app.post('/searches', collectFormData);
 app.post('/books', addToCollection);
 app.get('/books/:id', showBookDetails);
+app.put('/books/:id', updateBook);
+app.delete('/books/:id', deleteBook);
 app.get('*', (request, response) => response.status(404).render('./pages/error', {errorMessage: 'Page not found', errorCorrect: 'The path you took, leads only here. Some would call this, "nowhere".'}));
 
 
@@ -69,11 +75,15 @@ function collectFormData(request, response){
 
 function showBookDetails(request, response) {
     let id = request.params.id;
+    console.log('details', request.params.id)
     let sql = 'SELECT * FROM books WHERE id=$1;';
     let safeValues = [id];
 
     client.query(sql, safeValues)
-        .then(results => response.render('./pages/books/details', {book: results.rows}))
+        .then(results => {
+            console.log('pulled details', results.rows)
+            response.render('./pages/books/details', {book: results.rows})
+        })
         .catch((err) => {
             console.log('Error showing book details', err)
             response.status(500).render('./pages/error', {errorMessage: 'Could not show book details', errorCorrect: 'Yeah, I am not sure what you did there.'})
@@ -81,7 +91,57 @@ function showBookDetails(request, response) {
 }
 
 function addToCollection(request, response) {
+    let{title, authors_names, description, isbn, bookshelf, imageurl} = request.body;
+    console.log('request dat body', request.body);
+    let sql = `INSERT INTO books (title, authors_names, description, isbn, bookshelf, imageurl) VALUES ($1, $2, $3, $4, $5,$6) RETURNING id;`;
+    let safeValues = [title, authors_names, description, isbn, bookshelf, imageurl];
+    console.log('Try again', sql, safeValues);
+    client.query(sql, safeValues)
+        .then(results => {
+            console.log('results!!!', results.rows[0].id)
+            response.status(200).redirect(`./books/${results.rows[0].id}`)
+        })
+        .catch((err) => {
+            console.log('Error rendering template data from DB /addToCollection', err)
+            response.status(500).render('./pages/error', {errorMessage: 'Could not add books to DB or show them.', errorCorrect: 'Yeah, I am not sure what you did there.'})
+        })
+}
 
+function getDistinct(request, response){
+    let sql = 'SELECT DISTINCT bookshelf FROM books';
+    client.query(sql)
+       .then((results) => {
+           let shelfOption = results.rows;
+
+            response.status(200).render('./pages/partials/edit', {shelfOption});
+       }) 
+}
+
+function updateBook(request, response){
+    let id= request.params.id;
+    console.log(request.params.id)
+    let {title, authors_names, description, isbn, bookshelf, imageurl} = request.body;
+    let sql = 'UPDATE books SET title=$1, authors_names=$2, description=$3, isbn=$4, bookshelf=$5, imageurl=$6;';
+    let safeValues = [title, authors_names, description, isbn, bookshelf, imageurl];
+
+    client.query(sql, safeValues)
+        .then((results) => {
+            response.status(200).redirect(`/`);
+        }).catch((err) => {
+            console.log('Error at updateBook.', err)
+            response.status(500).render('./pages/error', {errorMessage: 'Could not update book in the DB.', errorCorrect: 'Maybe you redirected to the wrong page, maybe it needs to be a render. Or Maybe you should throw "results" back in that promise.'})
+        })
+}
+
+function deleteBook(request, response){
+    let id = request.params.id;
+    console.log('delete', id)
+    let sql = 'DELETE FROM books where id=$1;';
+    let safeValues = [id];
+
+    client.query(sql, safeValues)
+        .then(() => deleted())
+        .then(() => response.redirect('/'));
 }
 
 function handleErrors(error, request, response){
@@ -93,7 +153,7 @@ function Book(obj) {
     this.title = obj.title;
     this.authors_names = obj.authors;
     this.description = obj.description;
-    this.isbn = obj.industryIndetifiers;
+    this.isbn = obj.industryIdentifiers[0].identifier;
     this.bookshelf = obj.bookshelf;
     if(obj.imageLinks){
         this.imageurl = obj.imageLinks.thumbnail ? obj.imageLinks.thumbnail : url('./styles/img/book-placeholder.png');
