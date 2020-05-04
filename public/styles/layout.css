@@ -9,3 +9,6 @@ img {
     box-shadow: 2px 3px darkslategray;
 }
 
+.hidden {
+    display: none;
+}

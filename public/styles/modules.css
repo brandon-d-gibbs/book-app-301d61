@@ -90,6 +90,10 @@ fieldset>label {
 .addBookField{
     display: none;
 }
+.edit-button-form{
+    border: none;
+    background-color: transparent;
+}
 
 @media(min-width: 960px){
     .resultsMain{
@@ -100,7 +104,7 @@ fieldset>label {
     .bookRender{
         max-width: 40%;
         height: 550px;
-        overflow: hidden;
+        overflow: scroll;
 
     }
 }
